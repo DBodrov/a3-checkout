@@ -92,9 +92,9 @@ module.exports = (env, argv) => {
 
       new WebpackBar({name: appName}),
       new ReactRefreshWebpackPlugin(),
-      new CopyWebpackPlugin({
-        patterns: [{from: 'src/mockServiceWorker.js', to: 'dist/mockServiceWorker.js'}],
-      }),
+      // new CopyWebpackPlugin({
+      //   patterns: [{from: 'src/mockServiceWorker.js', to: 'dist/mockServiceWorker.js'}],
+      // }),
     ],
     devServer: {
       hot: true,
