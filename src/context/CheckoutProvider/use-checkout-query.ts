@@ -1,5 +1,5 @@
-import {useQuery} from 'react-query';
-import {TPaymentParams, createTransaction} from '@/api/Checkout.api';
+import {useQuery, useMutation, useQueryClient} from 'react-query';
+import {TPaymentParams, createTransaction, getCurrentStep, updateStep} from '@/api/Checkout.api';
 
 export function useCheckoutQuery(paymentParams: TPaymentParams) {
   return useQuery('transactionId', () => createTransaction(paymentParams), {
@@ -8,4 +8,23 @@ export function useCheckoutQuery(paymentParams: TPaymentParams) {
     retry: false,
     useErrorBoundary: true,
   });
+}
+
+export function useTemplateQuery(transactionId: string) {
+  return useQuery('template', () => getCurrentStep(transactionId), {
+    enabled: Boolean(transactionId),
+    staleTime: Infinity,
+    retry: false,
+    useErrorBoundary: true,
+  });
+}
+
+export function useStoreStepQuery() {
+  const queryClient = useQueryClient();
+  const updateStepMutation = useMutation(stepData => updateStep(stepData), {
+    onSuccess: data  => {
+      queryClient.setQueryData('template', data);
+    },
+  });
+  return updateStepMutation;
 }

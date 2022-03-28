@@ -2,7 +2,7 @@ import React from 'react';
 import {Routes, Route} from 'react-router-dom';
 // import {PaymentPage, NotFound, PaySuccessPage, PayFailPage, ThreeDSPage} from '@/screens';
 import {AppContainer} from '@/layouts';
-import {CheckoutPage} from '@/screens';
+import {CheckoutPage, NotFound} from '@/screens';
 
 export function App() {
   return (
@@ -13,7 +13,7 @@ export function App() {
         <Route path="success" element={<PaySuccessPage />} />
         <Route path="fail" element={<PayFailPage />} /> */}
       </Route>
-      {/* <Route path="*" element={<NotFound />} /> */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

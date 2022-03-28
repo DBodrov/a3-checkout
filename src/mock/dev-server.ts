@@ -1,7 +1,7 @@
 import {setupWorker, rest} from 'msw';
-import {configHandlers, paymentHandlers} from './dev-handlers';
+import {configHandlers, accountHandlers} from './dev-handlers';
 
-export const server = setupWorker(...configHandlers, ...paymentHandlers);
+export const server = setupWorker(...configHandlers, ...accountHandlers);
 
 (window as any).msw = {
   server,

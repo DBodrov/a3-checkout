@@ -3,17 +3,14 @@ process.env.NODE_ENV = 'test';
 module.exports = {
   rootDir: '../',
   roots: ['src'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
+  moduleFileExtensions: ['ts', 'tsx'],
   verbose: true,
   testMatch: ['**/src/**/?(*.)+(test).[jt]s?(x)'],
   moduleDirectories: ['node_modules'],
   moduleNameMapper: {
     '^src/(.*)': '<rootDir>/src/$1',
-    '^test/(.*)': '<rootDir>/test/$1',
-    '^components/(.*)': '<rootDir>/src/components/$1',
     '^assets/(.*)': '<rootDir>/src/assets/$1',
     '^screens/(.*)': '<rootDir>/src/screens/$1',
-    '^hooks': '<rootDir>/src/hooks',
     '^context/(.*)': '<rootDir>/src/context/$1',
     '^context': '<rootDir>/src/context',
     '^utils/(.*)': '<rootDir>/src/utils/$1',

@@ -1,6 +1,6 @@
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
-import {handlers, statusHandler, anketaHandler} from './test-handlers';
+import {configHandlers, accountHandlers} from './test-handlers';
 
-export const server = setupServer(...handlers);
-export {rest, statusHandler, anketaHandler};
+export const server = setupServer(...configHandlers, ...accountHandlers);
+export {rest};

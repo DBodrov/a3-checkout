@@ -1,361 +1,310 @@
 import {rest} from 'msw';
-import {AuthStatus} from 'context/Auth';
-import {TAnketaStep} from 'context/Anketa';
-import {anketa, getAnketa} from 'context/__mocks__/anketa-mock';
 
-export const handlers = [
-  rest.post('/gateway/reject-offer', async (req, res, ctx) => {
-    return res(ctx.json({code: 'OK'}));
-  }),
-  rest.post('/gateway/report/store-event', async (req, res, ctx) => {
-    return res(ctx.json({code: 'OK'}));
+export const configHandlers = [
+  rest.get('/front_new/msp/get_session_data.do', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({result: '1', data: 'b48f3b99-69be-4d75-851d-293cfcecf54f'}));
   }),
 
-  rest.post('/gateway/auth-status', (req, res, ctx) => {
-    const {cookies} = req;
-    if (cookies['userData'] && cookies['SESSION']) {
-      return res(ctx.status(200), ctx.json({status: 'AUTH2_REQUIRED'}));
-    }
-    return res(ctx.status(200), ctx.cookie('userData', '', {maxAge: 0}), ctx.json({status: 'INITIALIZE'}));
+  rest.post('/front_new/msp/init_step_sequence_obr.do', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({result: 1, item: {operation_id: 'f55c7d6c-4dee-4b6f-82a5-a2a8b38859bc'}}));
   }),
 
-  rest.post('/gateway/initialize', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.cookie('SESSION', '__Session_cookie__'),
-      ctx.json({sessionStatus: 'AUTH1_REQUIRED'}),
-    );
-  }),
-
-  rest.post('/gateway/auth1', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.cookie('userData', '__encrypted__user__data__'),
-      ctx.json({
-        passwordLength: 4,
-        passwordLifetimeInSeconds: 60,
-        sessionStatus: 'AUTH2_REQUIRED',
-        verified: true,
-      }),
-    );
-  }),
-
-  rest.post('/gateway/auth1-utm', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.cookie('userData', '__encrypted__user__data__'),
-      ctx.json({
-        passwordLength: 4,
-        passwordLifetimeInSeconds: 60,
-        phone: '79123456789',
-        sessionStatus: 'AUTH2_REQUIRED',
-        verified: true,
-      }),
-    );
-  }),
-  rest.post('/gateway/auth1-retry', (req, res, ctx) => {
+  rest.get('front_new/msp/get_current_step.do?operation_id=f55c7d6c-4dee-4b6f-82a5-a2a8b38859bc', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
-        passwordLength: 4,
-        passwordLifetimeInSeconds: 60,
-        sessionStatus: 'AUTH2_REQUIRED',
-        verified: true,
-      }),
-    );
-  }),
-
-  rest.post('/gateway/auth2-retry', (req, res, ctx) => {
-    if (req.body['verificationCode'] === '0000') {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          sessionStatus: 'AUTH2_REQUIRED',
-          verified: false,
-        }),
-      );
-    }
-    return res(
-      ctx.status(200),
-      ctx.json({
-        verified: true,
-        passwordLengtH: 4,
-        passwordLifetimeInSeconds: 60,
-        sessionStatus: 'OK',
-      }),
-    );
-  }),
-  rest.post('/gateway/auth2', (req, res, ctx) => {
-    if (req.body['verificationCode'] === '0000') {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          sessionStatus: 'AUTH2_REQUIRED',
-          verified: false,
-        }),
-      );
-    }
-    return res(
-      ctx.status(200),
-      ctx.cookie('userData', '_encripted_user_data_'),
-      ctx.json({
-        sessionStatus: 'OK',
-        verified: true,
-      }),
-    );
-  }),
-  rest.post('/gateway/send-sms', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        passwordLength: 4,
-        passwordLifetimeInSeconds: 60,
-      }),
-    );
-  }),
-
-  /** ANKETA HANDLERS */
-  rest.post('/gateway/credit-application/get-session-app', (req, res, ctx) => {
-    //TODO: Anketa steps switch
-    return res(ctx.status(200), ctx.json(anketa));
-  }),
-
-  rest.post('/gateway/credit-application/agree-to-sign-documents', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-
-  rest.post('/gateway/credit-application/archive-app', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-
-  rest.post('/gateway/credit-application/get-calculator-params', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        minLoanAmount: 10000,
-        maxLoanAmount: 100000,
-        minLoanTermMonths: 12,
-        maxLoanTermMonths: 72,
-        approvedLoanAmount: 50000,
-        approvedLoanTermMonths: 24,
-        productCode: 'product_code',
-      }),
-    );
-  }),
-  rest.post('/gateway/credit-application/get-all-monthly-payment', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        monthlyPayment: 20000.34,
-        monthlySmsPayment: 100,
-        allSmsPayment: null,
-        monthlyJobLossProtectionPayment: null,
-        allJobLossProtectionPayment: null,
-        monthlyLifeAndHealthProtectionPayment: null,
-        allLifeAndHealthProtectionPayment: null,
-        monthlyCampaignPayment: null,
-        allCampaignPayment: 322.228,
-        rate: 19.9,
-      }),
-    );
-  }),
-
-  rest.post('/gateway/credit-application/get-employee-monthly-payment', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({monthlyPayment: 12345}));
-  }),
-  rest.post('/gateway/credit-application/get-monthly-payment', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({monthlyPayment: 12345}));
-  }),
-  rest.post('/gateway/credit-application/send-documents', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post('/gateway/credit-application/send-signature-code', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post('/gateway/credit-application/sign-agreement', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        passwordLength: 4,
-        passwordLifetimeInSeconds: 60,
-        retryTimeInSeconds: 0,
-      }),
-    );
-  }),
-  rest.post('/gateway/credit-application/submit-form', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post('/gateway/credit-application/update-session-app-account-transfer-details', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post('/gateway/credit-application/update-session-app-card-transfer-details', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post('/gateway/credit-application/update-session-app-outer-card-transfer-details', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post(
-    '/gateway/credit-application/update-session-app-confirm-upload-passport-photo',
-    (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json({code: 'OK'}));
-    },
-  ),
-  rest.post('/gateway/credit-application/update-session-app-details', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post('/gateway/credit-application/update-session-app-loan-params', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post('/gateway/credit-application/update-session-app-passport', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post(
-    '/gateway/credit-application/update-session-app-refuse-upload-passport-photo',
-    (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json({code: 'OK'}));
-    },
-  ),
-  rest.post('/gateway/credit-application/update-session-app-registration-address', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post('/gateway/credit-application/upload-passport-photo', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post('/gateway/credit-application/verify-agreement-signature', (req, res, ctx) => {
-    if (req.body['verificationCode'] === '0000') {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          verified: false,
-        }),
-      );
-    }
-    return res(ctx.status(200), ctx.json({verified: true}));
-  }),
-  rest.post('/gateway/credit-application/verify-signature-code', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({code: 'OK'}));
-  }),
-  rest.post('/gateway/customer-profile/get-work-experience', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({workExperienceMonths: 28}));
-  }),
-  rest.post('/gateway/customer-profile/get-otp-cards', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        customerOtpCards: [
-          {
-            bankCardId: '2-QF19DDU',
-            bankCardNumber: '1234567890123456',
-            cardExpirationDt: '2020-12-25',
+        result: 1,
+        item: {
+          payment_recipient_id: '7154',
+          step: 1,
+          partner_ain: 80002012,
+          total_sum: 0.0,
+          ain: 31446097,
+          processing_mode: 'FREE_PAYMENT',
+          processing_status: 'UNDEFINED',
+          template: {
+            description: 'НУО Фонд капитального ремонта в УР',
+            next_template: [{source: 'ESB', template_id: 1}],
+            div: [
+              {
+                order: 10,
+                fields: {
+                  field: [
+                    {
+                      order: 10,
+                      name: 'PERSONAL_ACCOUNT',
+                      type: 'INPUT',
+                      description: 'Лицевой счет:',
+                      extType: 'PERSONAL_ACCOUNT',
+                      visible: true,
+                      editable: true,
+                      mandatory: true,
+                      validation: {expression: '\\d{1,10}$', message: 'Неверный формат ввода данных.'},
+                      example: 'Пример: 1234567890',
+                      css_class: 'normalText',
+                      hint: {text: 'Лицевой счет может содержать от 1 до 10 цифр.'},
+                    },
+                    {
+                      order: 12,
+                      name: 'CHECK_TEXT',
+                      type: 'TEXTAREA',
+                      description: 'Адрес:',
+                      extType: 'CLIENT',
+                      visible: false,
+                      editable: false,
+                      mandatory: false,
+                      css_class: 'normalText',
+                    },
+                    {
+                      default: 'freepayment',
+                      order: 15,
+                      name: 'SELECT_INVOICE',
+                      type: 'RADIO',
+                      description: 'Выберите вид оплаты:',
+                      extType: 'INVOICE',
+                      visible: false,
+                      editable: true,
+                      mandatory: true,
+                      value: 'freepayment',
+                      radio: {
+                        item: [
+                          {
+                            name: 'invoicepayment',
+                            description: 'Оплата по счету на сумму %invoiceAmount% руб.',
+                          },
+                          {name: 'freepayment', description: 'Произвольная сумма'},
+                        ],
+                      },
+                      css_class: 'normalText',
+                    },
+                  ],
+                },
+              },
+            ],
           },
-          {
-            bankCardId: '2-1QZXRWG',
-            bankCardNumber: '9876543200001234',
-            cardExpirationDt: '2023-10-02',
-          },
-        ],
-      }),
-    );
-  }),
-
-  rest.post('/gateway/dadata/suggestions/api/4_1/rs/suggest/bank', (req, res, ctx) => {
-    const query = JSON.parse(req.body as string)['query'];
-    if (query === '000000000') {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          suggestions: []
-        })
-      )
-    }
-    return res(
-      ctx.status(200),
-      ctx.json({
-        suggestions: [
-          {
-            value: 'КЦ СЕВЕРО-ЗАПАДНОГО ГУ БАНКА РОССИИ',
-            data: {
-              bic: '044012000',
-              address: {data: {region_with_type: 'г Санкт-Петербург'}},
-            },
-          },
-          {
-            value: 'СЕВЕРО-ЗАПАДНОЕ ГУ БАНКА РОССИИ',
-            data: {
-              bic: '044030001',
-              address: {data: {region_with_type: 'г Санкт-Петербург'}},
-            },
-          },
-          {
-            value: 'АО "АЛЬФА-БАНК"',
-            data: {
-              bic: '044525593',
-              address: {data: {region_with_type: 'г Москва'}},
-            },
-          },
-          {
-            value: 'ООО НКО "МОБИЛЬНАЯ КАРТА"',
-            data: {
-              bic: '044030303',
-              address: {data: {region_with_type: 'г Санкт-Петербург'}},
-            },
-          },
-          {
-            value: 'НКО АО ПРЦ',
-            data: {
-              bic: '044030505',
-              address: {data: {region_with_type: 'г Санкт-Петербург'}},
-            },
-          },
-          {
-            value: 'СЕВЕРО-ЗАПАДНЫЙ БАНК ПАО СБЕРБАНК',
-            data: {
-              bic: '044030653',
-              address: {data: {region_with_type: 'г Санкт-Петербург'}},
-            },
-          },
-          {
-            value: 'АО "СИТИ ИНВЕСТ БАНК"',
-            data: {
-              bic: '044030702',
-              address: {data: {region_with_type: 'г Санкт-Петербург'}},
-            },
-          },
-          {
-            value: 'Ф. ОПЕРУ БАНКА ВТБ (ПАО) В САНКТ-ПЕТЕРБУРГЕ',
-            data: {
-              bic: '044030704',
-              address: {data: {region_with_type: 'г Санкт-Петербург'}},
-            },
-          },
-          {
-            value: 'ПАО "БАЛТИНВЕСТБАНК"',
-            data: {
-              bic: '044030705',
-              address: {data: {region_with_type: 'г Санкт-Петербург'}},
-            },
-          },
-          {
-            value: 'ФИЛИАЛ ПАО "БАНК УРАЛСИБ" В Г.САНКТ-ПЕТЕРБУРГ',
-            data: {
-              bic: '044030706',
-              address: {data: {region_with_type: 'г Санкт-Петербург'}},
-            },
-          },
-        ],
+        },
       }),
     );
   }),
 ];
 
-export const statusHandler = (status: AuthStatus = 'INITIALIZE') =>
-  rest.post('/gateway/auth-status', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({status}));
-  });
+let updateCount = 0;
 
-export const anketaHandler = (step: TAnketaStep, anketaChanges: Partial<typeof anketa> = anketa) => {
-  const anketa = getAnketa(anketaChanges);
-  const updatedAnketa = {...anketa, status: step}
-  return rest.post('/gateway/credit-application/get-session-app', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(updatedAnketa));
-  })};
+const responseStep1 = {
+  result: 1,
+  item: {
+    payment_recipient_id: '7154',
+    step: 2,
+    partner_ain: 80002012,
+    total_sum: 0.0,
+    ain: 32162369,
+    processing_mode: 'FREE_PAYMENT',
+    processing_status: 'VERIFIED',
+    template: {
+      description: 'НУО Фонд капитального ремонта в УР',
+      next_template: [{source: 'ESB', template_id: 2}],
+      div: [
+        {
+          order: 10,
+          fields: {
+            field: [
+              {
+                order: 10,
+                name: 'PERSONAL_ACCOUNT',
+                type: 'INPUT',
+                description: 'Лицевой счет:',
+                extType: 'PERSONAL_ACCOUNT',
+                visible: true,
+                editable: false,
+                mandatory: true,
+                value: '00279835',
+                payload: '<root><business><accountGroup></accountGroup></business><parameters></parameters></root>',
+                validation: {expression: '\\d{1,10}$', message: 'Неверный формат ввода данных.'},
+                css_class: 'normalText',
+              },
+              {
+                order: 12,
+                name: 'CHECK_TEXT',
+                type: 'TEXTAREA',
+                description: 'Адрес:',
+                extType: 'CLIENT',
+                visible: true,
+                editable: false,
+                mandatory: false,
+                value: '427880, УР, Р-Н. АЛНАШСКИЙ, С. АЛНАШИ, УЛ. КРАСИЛЬНИКОВА, Д. 5, КВ.5',
+                css_class: 'normalText',
+              },
+              {
+                default: '00279835_022022',
+                order: 15,
+                name: 'SELECT_INVOICE',
+                type: 'RADIO',
+                description: 'Выберите вид оплаты:',
+                extType: 'INVOICE',
+                visible: true,
+                editable: true,
+                mandatory: true,
+                value: 'freepayment',
+                radio: {
+                  item: [
+                    {name: '00279835_022022', description: 'Оплата по счету на сумму 2548.04 руб.'},
+                    {name: 'freepayment', description: 'Произвольная сумма'},
+                  ],
+                },
+                css_class: 'normalText',
+              },
+            ],
+          },
+        },
+      ],
+      parameters: {
+        parameter: [
+          {
+            name: 'personalAccountInfoResponse',
+            value:
+              '<ns3:personalAccountInfoResponse xmlns:ns3="http://www.rtc-service.ru/partners/services/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><result><resCode>0</resCode><resMessage>ОК</resMessage></result><balanceValue>2548.04</balanceValue><balanceSign>+</balanceSign><checkText>427880, УР, Р-Н. АЛНАШСКИЙ, С. АЛНАШИ, УЛ. КРАСИЛЬНИКОВА, Д. 5, КВ.5</checkText><accountGroup/><services><service><srvName>Ведение спец.счета</srvName><srvCode>00279835_2</srvCode><sum>376.86</sum><parameters><parameter><parName>SERVICE_NAME</parName><parValue>Ведение спец.счета</parValue><parType/></parameter><parameter><parName>BIK</parName><parValue>044525411</parValue><parType/></parameter><parameter><parName>NAME</parName><parValue>Удмуртское отделение № 8618</parValue><parType/></parameter><parameter><parName>SCHET</parName><parValue>40603810504240000034</parValue><parType/></parameter><parameter><parName>KS</parName><parValue>30101810145250000411</parValue><parType/></parameter></parameters></service><service><srvName>Взнос за кап. ремонт</srvName><srvCode>00279835_1</srvCode><sum>2171.18</sum><parameters><parameter><parName>SERVICE_NAME</parName><parValue>Взнос за кап. ремонт</parValue><parType/></parameter><parameter><parName>BIK</parName><parValue>049401601</parValue><parType/></parameter><parameter><parName>NAME</parName><parValue>Удмуртское отделение № 8618</parValue><parType/></parameter><parameter><parName>SCHET</parName><parValue>40604810268000000639</parValue><parType/></parameter><parameter><parName>KS</parName><parValue>30101810400000000601</parValue><parType/></parameter></parameters></service></services><counters/><parameters><parameter><parName>ADDRESS</parName><parValue>427880, УР, р-н. Алнашский, с. Алнаши, ул. Красильникова, д. 5, кв.5</parValue><parType>_PARAM_SO</parType></parameter></parameters></ns3:personalAccountInfoResponse>',
+          },
+          {
+            name: 'getInvoicesResponce',
+            value:
+              '<ns3:getInvoicesResponse xmlns:ns3="http://www.rtc-service.ru/partners/services/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><result><resCode>0</resCode><resMessage>ОК</resMessage></result><invoices><invoice><invoiceNumber>00279835_022022</invoiceNumber><invoiceDate>2022-02-02T09:35:49.691+03:00</invoiceDate><invoiceAmount>2548.04</invoiceAmount><invoiceType>0</invoiceType><invoiceStatus>0</invoiceStatus><activeDate>2022-03-02+03:00</activeDate><services><service><srvName>Ведение спец.счета</srvName><srvCode>00279835_2</srvCode><sum>376.86</sum><parameters><parameter><parName>SERVICE_NAME</parName><parValue>Ведение спец.счета</parValue><parType/></parameter><parameter><parName>BIK</parName><parValue>044525411</parValue><parType/></parameter><parameter><parName>NAME</parName><parValue>Удмуртское отделение № 8618</parValue><parType/></parameter><parameter><parName>SCHET</parName><parValue>40603810504240000034</parValue><parType/></parameter><parameter><parName>KS</parName><parValue>30101810145250000411</parValue><parType/></parameter></parameters></service><service><srvName>Взнос за кап. ремонт</srvName><srvCode>00279835_1</srvCode><sum>2171.18</sum><parameters><parameter><parName>SERVICE_NAME</parName><parValue>Взнос за кап. ремонт</parValue><parType/></parameter><parameter><parName>BIK</parName><parValue>049401601</parValue><parType/></parameter><parameter><parName>NAME</parName><parValue>Удмуртское отделение № 8618</parValue><parType/></parameter><parameter><parName>SCHET</parName><parValue>40604810268000000639</parValue><parType/></parameter><parameter><parName>KS</parName><parValue>30101810400000000601</parValue><parType/></parameter></parameters></service></services></invoice></invoices></ns3:getInvoicesResponse>',
+          },
+        ],
+      },
+    },
+  },
+};
+
+const responseStep2 = {
+  result: 1,
+  item: {
+    payment_recipient_id: '7154',
+    step: 3,
+    partner_ain: 80002012,
+    total_sum: 0.0,
+    ain: 32162369,
+    processing_mode: 'FREE_PAYMENT',
+    template: {
+      description: 'НУО Фонд капитального ремонта в УР',
+      next_template: [{source: 'PAYMENT', template_id: 999}],
+      div: [
+        {
+          order: 10,
+          visible: true,
+          fields: {
+            field: [
+              {
+                order: 10,
+                name: 'PERSONAL_ACCOUNT',
+                type: 'INPUT',
+                description: 'Лицевой счет:',
+                extType: 'PERSONAL_ACCOUNT',
+                visible: true,
+                editable: false,
+                mandatory: true,
+                value: '00279835',
+                payload: '<root><business><accountGroup></accountGroup></business><parameters></parameters></root>',
+                validation: {expression: '\\d{1,10}$', message: 'Неверный формат ввода данных.'},
+                css_class: 'normalText',
+              },
+              {
+                order: 12,
+                name: 'CHECK_TEXT',
+                type: 'TEXTAREA',
+                description: 'Адрес:',
+                extType: 'CLIENT',
+                visible: true,
+                editable: false,
+                mandatory: false,
+                value: '427880, УР, Р-Н. АЛНАШСКИЙ, С. АЛНАШИ, УЛ. КРАСИЛЬНИКОВА, Д. 5, КВ.5',
+                css_class: 'normalText',
+              },
+              {
+                default: '00279835_022022',
+                order: 15,
+                name: 'SELECT_INVOICE',
+                type: 'RADIO',
+                description: 'Выберите вид оплаты:',
+                extType: 'INVOICE',
+                visible: false,
+                editable: false,
+                mandatory: true,
+                value: 'freepayment',
+                radio: {
+                  item: [
+                    {name: '00279835_022022', description: 'Оплата по счету на сумму 2548.04 руб.'},
+                    {name: 'freepayment', description: 'Произвольная сумма'},
+                  ],
+                },
+                css_class: 'normalText',
+              },
+              {
+                order: 31,
+                name: 'Service_00279835_2',
+                type: 'SUM',
+                description: 'Ведение спец.счета:',
+                extType: 'PR_SERVICE',
+                visible: true,
+                editable: true,
+                mandatory: false,
+                value: '376.86',
+                payload:
+                  '<root><business><srvCode>00279835_2</srvCode><tariff></tariff><requiredPay></requiredPay><sum>376.86</sum></business><parameters><parameter xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.rtc-service.ru/partners/services/"><parName>SERVICE_NAME</parName><parValue>Ведение спец.счета</parValue><parType/></parameter><parameter xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.rtc-service.ru/partners/services/"><parName>BIK</parName><parValue>044525411</parValue><parType/></parameter><parameter xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.rtc-service.ru/partners/services/"><parName>NAME</parName><parValue>Удмуртское отделение № 8618</parValue><parType/></parameter><parameter xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.rtc-service.ru/partners/services/"><parName>SCHET</parName><parValue>40603810504240000034</parValue><parType/></parameter><parameter xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.rtc-service.ru/partners/services/"><parName>KS</parName><parValue>30101810145250000411</parValue><parType/></parameter></parameters></root>',
+                validation: {expression: '^\\d{1,7}(\\.\\d{1,2})?$', message: 'Неверый формат ввода данных.'},
+                example: 'Пример: 1234567.00',
+                css_class: 'normalText',
+              },
+              {
+                order: 32,
+                name: 'Service_00279835_1',
+                type: 'SUM',
+                description: 'Взнос за кап. ремонт:',
+                extType: 'PR_SERVICE',
+                visible: true,
+                editable: true,
+                mandatory: false,
+                value: '2171.18',
+                payload:
+                  '<root><business><srvCode>00279835_1</srvCode><tariff></tariff><requiredPay></requiredPay><sum>2171.18</sum></business><parameters><parameter xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.rtc-service.ru/partners/services/"><parName>SERVICE_NAME</parName><parValue>Взнос за кап. ремонт</parValue><parType/></parameter><parameter xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.rtc-service.ru/partners/services/"><parName>BIK</parName><parValue>049401601</parValue><parType/></parameter><parameter xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.rtc-service.ru/partners/services/"><parName>NAME</parName><parValue>Удмуртское отделение № 8618</parValue><parType/></parameter><parameter xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.rtc-service.ru/partners/services/"><parName>SCHET</parName><parValue>40604810268000000639</parValue><parType/></parameter><parameter xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.rtc-service.ru/partners/services/"><parName>KS</parName><parValue>30101810400000000601</parValue><parType/></parameter></parameters></root>',
+                validation: {expression: '^\\d{1,7}(\\.\\d{1,2})?$', message: 'Неверый формат ввода данных.'},
+                example: 'Пример: 1234567.00',
+                css_class: 'normalText',
+              },
+            ],
+          },
+        },
+      ],
+      parameters: {
+        parameter: [
+          {
+            name: 'personalAccountInfoResponse',
+            value:
+              '<ns3:personalAccountInfoResponse xmlns:ns3="http://www.rtc-service.ru/partners/services/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><result><resCode>0</resCode><resMessage>ОК</resMessage></result><balanceValue>2548.04</balanceValue><balanceSign>+</balanceSign><checkText>427880, УР, Р-Н. АЛНАШСКИЙ, С. АЛНАШИ, УЛ. КРАСИЛЬНИКОВА, Д. 5, КВ.5</checkText><accountGroup/><services><service><srvName>Ведение спец.счета</srvName><srvCode>00279835_2</srvCode><sum>376.86</sum><parameters><parameter><parName>SERVICE_NAME</parName><parValue>Ведение спец.счета</parValue><parType/></parameter><parameter><parName>BIK</parName><parValue>044525411</parValue><parType/></parameter><parameter><parName>NAME</parName><parValue>Удмуртское отделение № 8618</parValue><parType/></parameter><parameter><parName>SCHET</parName><parValue>40603810504240000034</parValue><parType/></parameter><parameter><parName>KS</parName><parValue>30101810145250000411</parValue><parType/></parameter></parameters></service><service><srvName>Взнос за кап. ремонт</srvName><srvCode>00279835_1</srvCode><sum>2171.18</sum><parameters><parameter><parName>SERVICE_NAME</parName><parValue>Взнос за кап. ремонт</parValue><parType/></parameter><parameter><parName>BIK</parName><parValue>049401601</parValue><parType/></parameter><parameter><parName>NAME</parName><parValue>Удмуртское отделение № 8618</parValue><parType/></parameter><parameter><parName>SCHET</parName><parValue>40604810268000000639</parValue><parType/></parameter><parameter><parName>KS</parName><parValue>30101810400000000601</parValue><parType/></parameter></parameters></service></services><counters/><parameters><parameter><parName>ADDRESS</parName><parValue>427880, УР, р-н. Алнашский, с. Алнаши, ул. Красильникова, д. 5, кв.5</parValue><parType>_PARAM_SO</parType></parameter></parameters></ns3:personalAccountInfoResponse>',
+          },
+          {
+            name: 'getInvoicesResponce',
+            value:
+              '<ns3:getInvoicesResponse xmlns:ns3="http://www.rtc-service.ru/partners/services/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><result><resCode>0</resCode><resMessage>ОК</resMessage></result><invoices><invoice><invoiceNumber>00279835_022022</invoiceNumber><invoiceDate>2022-02-02T09:35:49.691+03:00</invoiceDate><invoiceAmount>2548.04</invoiceAmount><invoiceType>0</invoiceType><invoiceStatus>0</invoiceStatus><activeDate>2022-03-02+03:00</activeDate><services><service><srvName>Ведение спец.счета</srvName><srvCode>00279835_2</srvCode><sum>376.86</sum><parameters><parameter><parName>SERVICE_NAME</parName><parValue>Ведение спец.счета</parValue><parType/></parameter><parameter><parName>BIK</parName><parValue>044525411</parValue><parType/></parameter><parameter><parName>NAME</parName><parValue>Удмуртское отделение № 8618</parValue><parType/></parameter><parameter><parName>SCHET</parName><parValue>40603810504240000034</parValue><parType/></parameter><parameter><parName>KS</parName><parValue>30101810145250000411</parValue><parType/></parameter></parameters></service><service><srvName>Взнос за кап. ремонт</srvName><srvCode>00279835_1</srvCode><sum>2171.18</sum><parameters><parameter><parName>SERVICE_NAME</parName><parValue>Взнос за кап. ремонт</parValue><parType/></parameter><parameter><parName>BIK</parName><parValue>049401601</parValue><parType/></parameter><parameter><parName>NAME</parName><parValue>Удмуртское отделение № 8618</parValue><parType/></parameter><parameter><parName>SCHET</parName><parValue>40604810268000000639</parValue><parType/></parameter><parameter><parName>KS</parName><parValue>30101810400000000601</parValue><parType/></parameter></parameters></service></services></invoice></invoices></ns3:getInvoicesResponse>',
+          },
+          {
+            name: 'PERSONAL_ACCOUNT_PARAMETERS_FOR_FREE_PAYMENT',
+            value:
+              '<parameters><parameter xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.rtc-service.ru/partners/services/"><parName>ADDRESS</parName><parValue>427880, УР, р-н. Алнашский, с. Алнаши, ул. Красильникова, д. 5, кв.5</parValue><parType>_PARAM_SO</parType></parameter></parameters>',
+          },
+        ],
+      },
+    },
+  },
+};
+
+
+export const accountHandlers = [
+  rest.post('/front_new/msp/store_step.do', (req, res, ctx) => {
+    updateCount++;
+
+    return res(
+      ctx.status(200),
+      ctx.json(updateCount === 1 ? responseStep1 : responseStep2),
+    );
+  }),
+];
