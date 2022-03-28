@@ -1,0 +1,95 @@
+{
+  "initParams": {
+    "paidservice_id": "7154",
+    "partner_id": "80002012",
+    "region_id": "18"
+  },
+  "frameParams": {
+    "basket": false,
+    "allProviders": false,
+    "searchProviders": false,
+    "c2c": false,
+    "mainProviderDirectPay": false,
+    "hideGlavnayaCrumb": false,
+    "hideEmail": false,
+    "defaultPromo": false,
+    "linksAsButtons": false,
+    "providersAsHome": []
+  },
+  "crossAuth": {
+    "enabled": false
+  },
+  "tnsSettings": {
+    "tnsCalendar": false,
+    "toBasketOnPayButton": false
+  },
+  "theme": {
+    "mainColor": "#3a7ebf",
+    "linkColor": "#477bac",
+    "btnTextColor": "#ffffff"
+  },
+  "recommendedSettings": {
+    "recommendedOverPayButtonInBasket": false,
+    "showRecommendedAndSearchOnTop": false,
+    "hideRecommendedHeader": false,
+    "onlyRecommendedOnHomePage": false,
+    "mainPageSettings": {
+      "needButtons": false,
+      "showAll": false
+    },
+    "basketSettings": {
+      "needButtons": true,
+      "showAll": false,
+      "buttonText": "Добавить",
+      "headerText": "Добавить в корзину"
+    },
+    "paySuccessSettings": {
+      "needButtons": true,
+      "showAll": false,
+      "buttonText": "К оплате"
+    },
+    "recommendedAddText": []
+  },
+  "recommended": [],
+  "regions": {
+    "enabled": false,
+    "list": []
+  },
+  "googlePaySettings": {
+    "enabled": false,
+    "blackButton": false
+  },
+  "applePaySettings": {
+    "enabled": false,
+    "blackButton": false
+  },
+  "customHeader": {
+    "enabled": false,
+    "showByDefault": false,
+    "height": 0
+  },
+  "customFooter": {
+    "enabled": false
+  },
+  "categories": {
+    "communal": {
+      "enabled": true,
+      "countToShow": 3,
+      "positionNumber": 1
+    },
+    "gov": {
+      "enabled": true,
+      "countToShow": 3,
+      "positionNumber": 2
+    },
+    "other": {
+      "enabled": true,
+      "countToShow": 3,
+      "positionNumber": 3
+    },
+    "hideList": []
+  },
+  "title": "НУО Фонд капитального ремонта в Удмуртской Республике",
+  "htmlTitle": "Оплата НУО Фонд капитального ремонта в УР",
+  "version": "0.0.1"
+}

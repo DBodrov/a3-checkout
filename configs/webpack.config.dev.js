@@ -92,9 +92,9 @@ module.exports = (env, argv) => {
 
       new WebpackBar({name: appName}),
       new ReactRefreshWebpackPlugin(),
-      new CopyWebpackPlugin({
-        patterns: [{from: 'src/mockServiceWorker.js', to: 'dist/mockServiceWorker.js'}],
-      }),
+      // new CopyWebpackPlugin({
+      //   patterns: [{from: 'src/mockServiceWorker.js', to: 'dist/mockServiceWorker.js'}],
+      // }),
     ],
     devServer: {
       hot: true,
@@ -111,21 +111,19 @@ module.exports = (env, argv) => {
 
       port: PORT,
       historyApiFallback: true,
-      proxy: {
-        '/v1': {
-          target: 'https://payment-dev.a-3.ru',
+      proxy: [
+        {
+          context: ['/front_new', '/api', '/cards', '/basket-service_new', '/tns_api', '/calendar-api'],
+          target: 'https://uniframe.a-3.ru',
           changeOrigin: true,
-          secure: false,
         },
-        '/v1/processing': {
-          target: 'https://payment-dev.a-3.ru',
+        {
+          context: ['/.netlify'],
+          target: 'http://localhost:9999',
           changeOrigin: true,
-          secure: false,
-        },
-        context: ['/front_new', '/api', '/cards', '/basket-service_new', '/tns_api', '/calendar-api'],
-        target: 'https://uniframe.a-3.ru',
-        changeOrigin: true,
-      },
+          secure: false
+        }
+      ],
     },
   });
 };

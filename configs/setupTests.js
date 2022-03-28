@@ -4,8 +4,8 @@ import {server} from '../src/test/test-server';
 jest.setTimeout(30000)
 //mock GA userEvents
 //jest.mock('utils/use-page-view');
-const {userEvents} = require('utils/use-page-view');
-userEvents.mockImplementation(events => console.log(events));
+// const {userEvents} = require('utils/use-page-view');
+// userEvents.mockImplementation(events => console.log(events));
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
