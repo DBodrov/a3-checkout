@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import {server} from '../src/test/test-server';
+import {server} from '../src/mock/test-server';
 
 jest.setTimeout(30000)
 //mock GA userEvents
@@ -31,7 +31,7 @@ beforeAll(() => server.listen({onUnhandledRequest: 'error'}));
 afterAll(() => server.close());
 afterEach(() => {
   server.resetHandlers();
-  jest.runOnlyPendingTimers();
-  jest.useRealTimers();
+  // jest.runOnlyPendingTimers();
+  // jest.useRealTimers();
 });
-beforeEach(() => jest.useFakeTimers());
+// beforeEach(() => jest.useFakeTimers());

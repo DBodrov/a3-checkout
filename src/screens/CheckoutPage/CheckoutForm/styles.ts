@@ -7,11 +7,13 @@ export const Form = styled.form`
   align-items: flex-start;
   width: 100%;
   height: 100%;
-  gap: 1rem;
+  gap: 0.5rem;
   padding: 1rem;
   box-shadow: var(--card-shadow);
 `;
 
 export const Label = styled.label`
   width: 100%;
+  font-size: 0.87rem;
+  color: var(--color-text-secondary);
 `;

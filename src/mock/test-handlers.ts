@@ -9,7 +9,8 @@ export const configHandlers = [
     return res(ctx.status(200), ctx.json({result: 1, item: {operation_id: 'f55c7d6c-4dee-4b6f-82a5-a2a8b38859bc'}}));
   }),
 
-  rest.get('front_new/msp/get_current_step.do?operation_id=f55c7d6c-4dee-4b6f-82a5-a2a8b38859bc', (req, res, ctx) => {
+  rest.get('front_new/msp/get_current_step.do', (req, res, ctx) => {
+
     return res(
       ctx.status(200),
       ctx.json({
@@ -297,14 +298,13 @@ const responseStep2 = {
   },
 };
 
-
 export const accountHandlers = [
   rest.post('/front_new/msp/store_step.do', (req, res, ctx) => {
+    if (updateCount === 2) {
+      updateCount = 0;
+    }
     updateCount++;
 
-    return res(
-      ctx.status(200),
-      ctx.json(updateCount === 1 ? responseStep1 : responseStep2),
-    );
+    return res(ctx.status(200), ctx.json(updateCount === 1 ? responseStep1 : responseStep2));
   }),
 ];
