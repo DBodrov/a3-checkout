@@ -3,11 +3,12 @@ process.env.NODE_ENV = 'test';
 module.exports = {
   rootDir: '../',
   roots: ['src'],
-  moduleFileExtensions: ['ts', 'tsx'],
+  moduleFileExtensions: ['js', 'ts', 'tsx'],
   verbose: true,
   testMatch: ['**/src/**/?(*.)+(test).[jt]s?(x)'],
   moduleDirectories: ['node_modules'],
   moduleNameMapper: {
+    '^@/(.*)': '<rootDir>/src/$1',
     '^src/(.*)': '<rootDir>/src/$1',
     '^assets/(.*)': '<rootDir>/src/assets/$1',
     '^screens/(.*)': '<rootDir>/src/screens/$1',
@@ -27,4 +28,5 @@ module.exports = {
   transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$'],
   resetMocks: true,
   setupFilesAfterEnv: ['<rootDir>/configs/setupTests.js'],
+  testEnvironment: 'jest-environment-jsdom'
 };

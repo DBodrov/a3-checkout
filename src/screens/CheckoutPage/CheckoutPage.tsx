@@ -6,13 +6,14 @@ import {CheckoutForm} from './CheckoutForm';
 
 export function CheckoutPage() {
   const {settings, isLoading} = useCheckout();
+  console.log('isLoading', isLoading)
 
   return (
     <Page>
       <H1 css={{padding: '1rem 0'}}>{settings.title}</H1>
       {isLoading ? (
         <Loader>
-          <span>Загрузка...</span>
+          <span>Инициализация...</span>
         </Loader>
       ) : (
         <CheckoutForm />

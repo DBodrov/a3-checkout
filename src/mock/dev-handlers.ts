@@ -297,14 +297,13 @@ const responseStep2 = {
   },
 };
 
-
 export const accountHandlers = [
   rest.post('/front_new/msp/store_step.do', (req, res, ctx) => {
+    if (updateCount === 2) {
+      updateCount = 0;
+    }
     updateCount++;
 
-    return res(
-      ctx.status(200),
-      ctx.json(updateCount === 1 ? responseStep1 : responseStep2),
-    );
+    return res(ctx.status(200), ctx.json(updateCount === 1 ? responseStep1 : responseStep2));
   }),
 ];

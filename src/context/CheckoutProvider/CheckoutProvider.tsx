@@ -48,6 +48,7 @@ export function CheckoutProvider({children}: {children: React.ReactNode}) {
     isLoading: isTemplateLoading,
   } = useTemplateQuery(transactionId);
 
+
   const nextStep = templateQueryData?.template?.next_template[0]?.template_id;
 
   const mutateStep = useStoreStepQuery();

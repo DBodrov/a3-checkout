@@ -1,5 +1,6 @@
 import React, {StrictMode} from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter} from 'react-router-dom';
 import {Global} from '@emotion/react';
 import {AppProviders} from '@/context';
 // import {initSentry} from '@/utils/use-sentry';
@@ -20,14 +21,14 @@ function addVersion() {
   body.setAttribute('data-version', process.env.VERSION!);
 }
 
-
 ReactDOM.render(
   <StrictMode>
     <Global styles={appStyles} />
     <AppProviders>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </AppProviders>
   </StrictMode>,
   document.getElementById('root'),
 );
-

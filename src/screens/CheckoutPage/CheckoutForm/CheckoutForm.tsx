@@ -70,7 +70,8 @@ export function CheckoutForm() {
         );
       case 'TEXTAREA': {
         return (
-          <article css={{height: '4rem', padding: '1rem 0'}} key={field.name}>
+          <article css={{display: 'flex', flexDirection: 'column', padding: '1rem 0'}} key={field.name}>
+            <Span css={{padding: '0.5rem 0', fontSize: '0.87rem'}}>{field.description}</Span>
             <Span css={{lineHeight: 1}}>{field.value}</Span>
           </article>
         );
@@ -125,11 +126,11 @@ export function CheckoutForm() {
         : null}
       {nextStep === 999 ? (
         <article css={{display: 'flex', flexDirection: 'column'}}>
-          <Span css={{padding: '1rem 0'}}>К оплате</Span>
+          <Span css={{padding: '1rem 0', color: 'var(--color-text-secondary)'}}>К оплате</Span>
           <Span css={{fontSize: '1.2rem', fontWeight: 'bolder'}}>{toCurrency(amount)}</Span>
         </article>
       ) : null}
-      <Button type="submit" css={{width: '100%'}}>
+      <Button type="submit" css={{width: '100%', marginTop: '1rem'}}>
         {step === 1 ? 'Найти' : nextStep === 999 ? 'Перейти к оплате' : 'Далее'}
       </Button>
     </Form>
