@@ -6,7 +6,6 @@ import {CheckoutForm} from './CheckoutForm';
 
 export function CheckoutPage() {
   const {settings, isLoading} = useCheckout();
-  console.log('isLoading', isLoading)
 
   return (
     <Page>
