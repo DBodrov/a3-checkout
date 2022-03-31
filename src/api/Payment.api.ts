@@ -14,8 +14,8 @@ export async function createPaymentLink(paymentLinkParams: TPaymentLinkParams) {
         'Content-type': 'application/json',
       },
     });
-    if (response.code === 200) {
-      window.location.assign(response.data.url)
-    }
-  } catch (error) {}
+    return response.data;
+  } catch (error) {
+    throw new Response('Create payment link error', {status: 400, statusText: error as string})
+  }
 }

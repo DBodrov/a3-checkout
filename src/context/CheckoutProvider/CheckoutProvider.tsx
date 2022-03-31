@@ -1,8 +1,9 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
 import {Loader} from '@a3/frontkit';
+import {TPaymentLinkParams} from '@/api/Payment.api';
 import {useSettings} from './use-config';
-import {useCheckoutQuery, useTemplateQuery, useStoreStepQuery} from './use-checkout-query';
+import {useCheckoutQuery, useTemplateQuery, useStoreStepQuery, usePaymentLinkQuery} from './use-checkout-query';
 import {TField} from './types';
 
 type TCheckoutContext = {
@@ -13,6 +14,7 @@ type TCheckoutContext = {
   nextStep?: number;
   isLoading: boolean;
   updateStep: (stepData: any) => void;
+  createPaymentLink: (payment: TPaymentLinkParams) => void;
 };
 
 function readTemplate(templateResponse: Record<string, any>) {
@@ -48,13 +50,16 @@ export function CheckoutProvider({children}: {children: React.ReactNode}) {
     isLoading: isTemplateLoading,
   } = useTemplateQuery(transactionId);
 
-
   const nextStep = templateQueryData?.template?.next_template[0]?.template_id;
 
   const mutateStep = useStoreStepQuery();
   const {mutate, isLoading: isUpdating} = mutateStep;
+
+  const paymentLinkMutation = usePaymentLinkQuery();
+  const {isLoading: isLinkCreating, isSuccess: isLinkCreated, mutate: createPaymentLink} = paymentLinkMutation;
+
   const template = readTemplate(templateQueryData);
-  const isLoading = isTemplateIdle || isTemplateLoading || isUpdating;
+  const isLoading = isTemplateIdle || isTemplateLoading || isUpdating || isLinkCreating || isLinkCreated;
 
   if (isConfigLoading) {
     return (
@@ -66,7 +71,16 @@ export function CheckoutProvider({children}: {children: React.ReactNode}) {
 
   return (
     <CheckoutContext.Provider
-      value={{settings, transactionId, template, updateStep: mutate, step: templateQueryData?.step, isLoading, nextStep}}>
+      value={{
+        settings,
+        transactionId,
+        template,
+        updateStep: mutate,
+        step: templateQueryData?.step,
+        isLoading,
+        nextStep,
+        createPaymentLink
+      }}>
       {children}
     </CheckoutContext.Provider>
   );

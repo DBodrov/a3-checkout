@@ -1,5 +1,7 @@
 import {useQuery, useMutation, useQueryClient} from 'react-query';
+import {useNavigate} from 'react-router-dom';
 import {TPaymentParams, createTransaction, getCurrentStep, updateStep} from '@/api/Checkout.api';
+import {createPaymentLink, TPaymentLinkParams} from '@/api/Payment.api';
 
 export function useCheckoutQuery(paymentParams: TPaymentParams) {
   return useQuery('transactionId', () => createTransaction(paymentParams), {
@@ -22,9 +24,20 @@ export function useTemplateQuery(transactionId: string) {
 export function useStoreStepQuery() {
   const queryClient = useQueryClient();
   const updateStepMutation = useMutation(stepData => updateStep(stepData), {
-    onSuccess: data  => {
+    onSuccess: data => {
       queryClient.setQueryData('template', data);
     },
   });
   return updateStepMutation;
+}
+
+export function usePaymentLinkQuery() {
+  const paymentLinkMutation = useMutation((paymentParams: TPaymentLinkParams) => createPaymentLink(paymentParams), {
+    useErrorBoundary: true,
+    onSuccess: data => {
+      window.location.assign(data.url);
+    },
+  });
+
+  return paymentLinkMutation;
 }

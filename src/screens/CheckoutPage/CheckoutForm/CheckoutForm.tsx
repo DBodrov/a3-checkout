@@ -2,14 +2,14 @@ import React from 'react';
 import {Button, Input, Span} from '@a3/frontkit';
 import {useCheckout} from '@/context';
 import {TField} from '@/context/CheckoutProvider/types';
-import {createPaymentLink, TPaymentLinkParams} from '@/api/Payment.api';
+import {TPaymentLinkParams} from '@/api/Payment.api';
 import {toCurrency} from '@/utils/string.utils';
 import {PaymentTypeRadio} from './PaymentTypeRadio';
 import {useCheckoutForm} from './use-checkout-form';
 import {Form, Label} from './styles';
 
 export function CheckoutForm() {
-  const {template, updateStep, step, nextStep, transactionId} = useCheckout();
+  const {template, updateStep, step, nextStep, transactionId, createPaymentLink} = useCheckout();
   const {handleValidate, handleValidateAllFields, dispatch, hasError, values, errors, amount} =
     useCheckoutForm(template);
 
