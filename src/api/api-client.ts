@@ -18,14 +18,18 @@ export async function apiClient<T = any>(endpoint: string, requestConfig: IReque
 
   return window.fetch(endpoint, config as RequestInit).then(async response => {
     if (!response.ok) {
-      return Promise.reject(response);
+      return Promise.reject(response.statusText);
     }
     if (response.redirected) {
       window.location.href = response.url;
+      return;
     }
     const data = await response.json();
-    if ('error' in data) {
-      return Promise.reject(data.error);
+    // if ('error' in data) {
+    //   return Promise.reject(data.error);
+    // }
+    if (data.code >= 400) {
+      return Promise.reject(data)
     }
     return data;
   });

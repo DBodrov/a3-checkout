@@ -8,7 +8,7 @@ export interface IAppFallbackProps {
 export function ErrorFallback(props: IAppFallbackProps) {
   const {error} = props;
   const errorCode = error.status;
-  console.log('fallback error props', props)
+  // console.log('fallback error props', props)
 
   if (errorCode === 404) {
     return <NotFound />

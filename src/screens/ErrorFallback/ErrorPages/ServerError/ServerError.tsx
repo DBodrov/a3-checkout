@@ -3,6 +3,8 @@ import {Button} from '@a3/frontkit';
 import {H1, H2, Span} from '@a3/frontkit';
 import {IAppFallbackProps} from '@/screens';
 
+
+
 export function ServerError(props: IAppFallbackProps) {
   const {error, resetErrorBoundary} = props;
 
@@ -31,7 +33,9 @@ export function ServerError(props: IAppFallbackProps) {
         Что-то пошло не так...
       </H2>
       <Span css={{color: 'var(--color-text-secondary)', padding: '1rem 0'}}>{error.statusText}</Span>
-      <Button type="button" onClick={resetErrorBoundary}>Повторить</Button>
+      <Button type="button" onClick={resetErrorBoundary}>
+        Повторить
+      </Button>
     </div>
   );
 }
