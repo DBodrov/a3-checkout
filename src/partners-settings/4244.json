@@ -1,0 +1,168 @@
+{
+  "version": "0.0.32",
+  "title": "ТНС энерго Карелия",
+  "htmlTitle": "Передать показания и оплатить ТНС энерго",
+  "initParams": {
+    "paidservice_id": "4244",
+    "partner_id": "80000227",
+    "region_id": "1022"
+  },
+  "jivosite": "F7iNbfxRfw",
+  "containerGTM": "GTM-KHHB4WX",
+  "frameParams": {
+    "basket": true,
+    "allProviders": true,
+    "searchProviders": true,
+    "defaultPromo": true,
+    "BID": "3443",
+    "mainProviderDirectPay": false,
+    "hideEmail": false,
+    "tnsCalendar": true,
+    "c2c": false,
+    "hideGlavnayaCrumb": false,
+    "linksAsButtons": false,
+    "providersAsHome": [""],
+    "promoSpecial": true
+  },
+  "tnsSettings": {
+    "tnsCalendar": true,
+    "toBasketOnPayButton": false,
+    "defaultPromoEnergy": true
+  },
+  "theme": {
+    "mainColor": "#13A438",
+    "linkColor": "#13A438"
+  },
+  "recommendedSettings": {
+    "showRecommendedAndSearchOnTop": false,
+    "recommendedOverPayButtonInBasket": true,
+    "hideRecommendedHeader": false,
+    "mainPageSettings": {
+      "needButtons": false,
+      "showAll": false
+    },
+    "basketSettings": {
+      "buttonText": "Добавить",
+      "headerText": "Добавить в корзину",
+      "needButtons": true,
+      "showAll": false
+    },
+    "paySuccessSettings": {
+      "buttonText": "К оплате",
+      "needButtons": true,
+      "showAll": false
+    },
+    "recommendedAddText": [
+      "4241",
+      "4244",
+      "7145",
+      "7220",
+      "7221",
+      "7144",
+      "7146",
+      "4344",
+      "754",
+      "157",
+      "4853",
+      "5528",
+      "5453",
+      "4772",
+      "4744",
+      "4292",
+      "706",
+      "4860",
+      "4870",
+      "4746",
+      "4869",
+      "4771",
+      "4868",
+      "4254",
+      "4186",
+      "4185",
+      "4747",
+      "6492",
+      "6526",
+      "6122",
+      "6052",
+      "6172",
+      "6984",
+      "6948",
+      "6871",
+      "6018",
+      "6015",
+      "5091"
+    ],
+    "onlyRecommendedOnHomePage": false
+  },
+  "recommended": [
+    {
+      "id": 4750,
+      "src": "https://www.a-3.ru/img/logo_png/MRG.png",
+      "name": "Газпром межрегионгаз Санкт-Петербург"
+    },
+    {
+      "id": 6492,
+      "src": "https://www.a-3.ru/img/logo_png/6492.png",
+      "name": "ООО «Энергокомфорт» Карелия»"
+    },
+    {
+      "id": 5443,
+      "src": "https://www.a-3.ru/img/logo_png/5443.png",
+      "name": "ООО 'КРЦ' г. Петрозаводск"
+    },
+    {
+      "id": 6030,
+      "src": "https://www.a-3.ru/img/logo_png/home-icon.png",
+      "name": "АО \"ЕРЦ Республики Карелия\""
+    },
+    {
+      "id": 6033,
+      "src": "https://www.a-3.ru/img/logo_png/home-icon.png",
+      "name": "ПАО \"ТГК-1\""
+    }
+  ],
+  "regions": {
+    "enabled": false,
+    "list": []
+  },
+  "customHeader": {
+    "enabled": false,
+    "showByDefault": false,
+    "height": 0
+  },
+  "categories": {
+    "communal": {
+      "enabled": true,
+      "countToShow": 3,
+      "positionNumber": 1
+    },
+    "gov": {
+      "enabled": true,
+      "countToShow": 3,
+      "positionNumber": 2
+    },
+    "other": {
+      "enabled": true,
+      "countToShow": 3,
+      "positionNumber": 3
+    },
+    "hideList": []
+  },
+  "crossAuth": {
+    "enabled": true
+  },
+  "googlePaySettings": {
+    "enabled": true,
+    "blackButton": true
+  },
+  "applePaySettings": {
+    "enabled": true,
+    "blackButton": true
+  },
+  "customFooter": {
+    "enabled": false
+  },
+  "insurance": {
+    "enabled": true
+  }
+}
