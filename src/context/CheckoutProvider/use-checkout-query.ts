@@ -1,5 +1,4 @@
 import {useQuery, useMutation, useQueryClient} from 'react-query';
-import {useNavigate} from 'react-router-dom';
 import {TPaymentParams, createTransaction, getCurrentStep, updateStep} from '@/api/Checkout.api';
 import {createPaymentLink, TPaymentLinkParams} from '@/api/Payment.api';
 
