@@ -1,6 +1,13 @@
 import {rest} from 'msw';
+import settings from '../partners-settings/4244.json'
 
 export const configHandlers = [
+  rest.get('/v1/config/:providerId', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json(settings)
+    )
+  }),
   rest.get('/front_new/msp/get_session_data.do', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({result: '1', data: 'b48f3b99-69be-4d75-851d-293cfcecf54f'}));
   }),

@@ -1,14 +1,13 @@
 import React from 'react';
 import {Outlet} from 'react-router-dom';
-import {CheckoutProvider} from '@/context'
+import {ConfigProvider} from '@/context'
 
 
 export function AppContainer() {
-
   return (
-    <CheckoutProvider>
+    <ConfigProvider>
       <Outlet />
-    </CheckoutProvider>
+    </ConfigProvider>
   )
 
 

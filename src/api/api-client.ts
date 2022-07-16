@@ -11,6 +11,7 @@ export async function apiClient<T = any>(endpoint: string, requestConfig: IReque
     body: body ? body : undefined,
     headers: {
       Authorization: token ? `Bearer ${token}` : undefined,
+      'Content-Type': 'application/json',
       ...customHeaders,
     },
     ...customConfig,
@@ -29,7 +30,7 @@ export async function apiClient<T = any>(endpoint: string, requestConfig: IReque
     //   return Promise.reject(data.error);
     // }
     if (data.code >= 400) {
-      return Promise.reject(data)
+      return Promise.reject(data.message)
     }
     return data;
   });

@@ -1,9 +1,14 @@
 import {useQuery, useMutation, useQueryClient} from 'react-query';
+import {useSearchParams} from 'react-router-dom';
 import {TPaymentParams, createTransaction, getCurrentStep, updateStep} from '@/api/Checkout.api';
 import {createPaymentLink, TPaymentLinkParams} from '@/api/Payment.api';
 
 export function useCheckoutQuery(paymentParams: TPaymentParams) {
-  return useQuery('transactionId', () => createTransaction(paymentParams), {
+  const [searchParams] = useSearchParams();
+  const transactionId = searchParams.get('transaction_id');
+  console.log('trID ', transactionId)
+
+  return useQuery('transactionId', () => Boolean(transactionId) ? transactionId : createTransaction(paymentParams), {
     enabled: Boolean(paymentParams),
     staleTime: Infinity,
     retry: false,
